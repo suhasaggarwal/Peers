@@ -12,7 +12,11 @@ export default [
                 sourcemap: true,
             },
         ],
-        plugins: [typescript()],
+        plugins: [
+            typescript({
+                tsconfig: './tsconfig.json',
+            }),
+        ],
     },
     {
         input: 'src/index.ts',
@@ -26,6 +30,7 @@ export default [
         ],
         plugins: [
             typescript({
+                tsconfig: './tsconfig.json',
                 target: 'ES5',
                 downlevelIteration: true,
             }),

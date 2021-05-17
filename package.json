@@ -7,13 +7,14 @@
   "license": "MIT",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.mjs",
-  "types": "dist/index.d.ts",
+  "types": "dist/esm/src/index.d.ts",
   "scripts": {
-    "start": "rollup -c --watch",
-    "build": "rollup -c",
+    "start": "yarn clean && rollup -c --watch",
+    "build": "yarn clean && rollup -c",
     "prepare": "husky install",
     "format": "prettier --write .",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx,.vue ."
+    "lint": "eslint --ext .js,.ts .",
+    "clean": "rimraf dist"
   },
   "dependencies": {
     "@shelacek/ubjson": "^1.1.0",

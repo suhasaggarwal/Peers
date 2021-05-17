@@ -2,4 +2,7 @@
 .vscode/
 node_modules/
 /.*
-yarn.lock
+/*.config.js
+/tsconfig.json
+/tsconfig.*.json
+/yarn.lock
