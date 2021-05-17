@@ -1,12 +1,12 @@
 {
   "name": "@cloudpss/peers",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "CloudPSS p2p framework",
   "repository": "https://github.com/CloudPSS/peers",
   "author": "CloudPSS",
   "license": "MIT",
   "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.mjs",
+  "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
     "start": "yarn clean && tsc --watch",
