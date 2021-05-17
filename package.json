@@ -1,0 +1,37 @@
+{
+  "name": "peers",
+  "version": "0.0.1",
+  "description": "CloudPSS p2p framework",
+  "repository": "https://github.com/CloudPSS/peers",
+  "author": "CloudPSS",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 14"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepare": "husky install",
+    "format": "prettier --write .",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx,.vue ."
+  },
+  "dependencies": {
+    "simple-peer": "^9.11.0",
+    "socket.io-client": "^4.1.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^12.1.4",
+    "@types/simple-peer": "^9.6.3",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-jsdoc": "^34.6.3",
+    "eslint-plugin-prettier": "^3.4.0",
+    "husky": "^6.0.0",
+    "lint-staged": "^11.0.0",
+    "prettier": "^2.3.0",
+    "type-fest": "^1.1.1",
+    "typescript": "^4.2.4"
+  }
+}
