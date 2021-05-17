@@ -1,16 +1,16 @@
 {
-  "name": "peers",
-  "version": "0.0.1",
+  "name": "@cloudpss/peers",
+  "version": "0.0.2",
   "description": "CloudPSS p2p framework",
   "repository": "https://github.com/CloudPSS/peers",
   "author": "CloudPSS",
   "license": "MIT",
-  "engines": {
-    "node": ">= 14"
-  },
-  "main": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.mjs",
   "types": "dist/index.d.ts",
   "scripts": {
+    "start": "rollup -c --watch",
+    "build": "rollup -c",
     "prepare": "husky install",
     "format": "prettier --write .",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx,.vue ."
@@ -19,10 +19,12 @@
     "@shelacek/ubjson": "^1.1.0",
     "rxjs": "^7.0.1",
     "simple-peer": "^9.11.0",
-    "socket.io-client": "^4.1.1"
+    "socket.io-client": "^4.1.1",
+    "tslib": "^2.2.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
+    "@rollup/plugin-typescript": "^8.2.1",
     "@types/simple-peer": "^9.6.3",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
@@ -33,6 +35,7 @@
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "prettier": "^2.3.0",
+    "rollup": "^2.48.0",
     "type-fest": "^1.1.1",
     "typescript": "^4.2.4"
   }
