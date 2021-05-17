@@ -16,6 +16,8 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx,.vue ."
   },
   "dependencies": {
+    "@shelacek/ubjson": "^1.1.0",
+    "rxjs": "^7.0.1",
     "simple-peer": "^9.11.0",
     "socket.io-client": "^4.1.1"
   },
