@@ -1,10 +1,12 @@
 import { Observable, Subject } from 'rxjs';
-import SimplePeer, { Instance as Peer } from 'simple-peer';
+import SimplePeer, { Instance as Peer, Options, SignalData } from 'simple-peer';
 import { io, Socket } from 'socket.io-client';
 import { Encoding } from './encoding';
 
 /** config of peers */
 export interface PeersConfig {
+    /** a friendly name for this peer */
+    label?: string;
     /** url of api connection, defaults to `location.origin` */
     url?: string;
     /** user token */
@@ -12,7 +14,9 @@ export interface PeersConfig {
     /** room id */
     room: string;
     /** 编解码消息 */
-    encoding?: Encoding;
+    encoding?: (this: Peers) => Encoding;
+    /** WRTC 实现 */
+    wrtc?: Options['wrtc'];
 }
 
 /** 默认URL */
@@ -25,20 +29,22 @@ function getDefaultUrl(): string {
 
 /** P2P connection */
 export class Peers {
-    constructor(config: PeersConfig) {
-        const url = config.url ?? getDefaultUrl();
-        this.encoding = config.encoding ?? new Encoding();
+    constructor(readonly config: PeersConfig) {
+        const url = (config.url ??= getDefaultUrl());
+        this.encoding = config.encoding?.call(this) ?? new Encoding();
 
         this._socket = io(url, {
-            path: '/peers',
+            path: '/socket.io/peers',
             auth: {
                 token: config.token,
                 room: config.room,
+                label: config.label,
             },
         });
 
         this._socket.on('prepare', ({ sockets, iceServers }) => {
-            for (const id of sockets) {
+            for (const id in sockets) {
+                this._labels.set(id, (sockets as Record<string, string>)[id]);
                 if (id === this._socket.id) continue;
                 this._rtcConfig = {
                     iceServers: iceServers as RTCIceServer[],
@@ -55,7 +61,9 @@ export class Peers {
             if (!peer) {
                 peer = this._createPeer(source);
             }
-            peer.signal(data);
+            const d = data as SignalData & { label?: string };
+            peer.signal(d);
+            this._labels.set(source, d.label);
         });
 
         this._socket.on('error', (err: { data: string }) => {
@@ -70,6 +78,8 @@ export class Peers {
     private readonly _socket: Socket;
     /** Created p2p connection */
     private readonly _peers = new Map<string, Peer>();
+    /** Created p2p connection */
+    private readonly _labels = new Map<string, string | undefined>();
     /** config of rtc connection */
     private _rtcConfig: RTCConfiguration = {};
     /** 收到数据 */
@@ -83,6 +93,12 @@ export class Peers {
         return [...this._peers.keys()];
     }
 
+    /** 链接的标签 */
+    labelOf(id: string): string {
+        const label = this._labels.get(id);
+        return label ?? id;
+    }
+
     /** 收到数据 */
     get data(): Observable<{ sender: string; message: unknown }> {
         return this._data.asObservable();
@@ -94,6 +110,7 @@ export class Peers {
             initiator,
             config: this._rtcConfig,
             objectMode: true,
+            wrtc: this.config.wrtc,
         });
         this._peers.set(id, peer);
 
@@ -119,7 +136,7 @@ export class Peers {
     }
 
     /** 数据回调 */
-    protected _onPeerData(sender: string, data: ArrayBuffer): void {
+    protected _onPeerData(sender: string, data: Uint8Array): void {
         const message = this.encoding.onMessage(sender, data);
         if (message == null) return;
         this._data.next(message);
@@ -136,7 +153,7 @@ export class Peers {
     }
 
     /** 发送数据的实现 */
-    protected async _send(chunks: ArrayBuffer[], receiver: Peer): Promise<void> {
+    protected async _send(chunks: Uint8Array[], receiver: Peer): Promise<void> {
         for (const chunk of chunks) {
             await new Promise<void>((resolve, reject) => {
                 receiver.write(chunk, (err) => {

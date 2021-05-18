@@ -9,19 +9,26 @@ const decoder = new UbjsonDecoder({
     highPrecisionNumberHandling: 'raw',
     useTypedArrays: true,
 });
-/** 单个消息分片大小上限 */
+/** 单个消息分片大小上限，不包括消息头 */
 const MAX_LEN = 15 * 1024;
+/** 消息头大小 */
+const HEADER_SIZE = 8;
 /** 单个消息分片数量上限 */
 const MAX_CHUNK = 65535;
+
+/** 转为 DataView */
+function getView(chunk: Uint8Array): DataView {
+    return new DataView(chunk.buffer, chunk.byteOffset, chunk.byteLength);
+}
 
 /** 编解码消息 */
 export class Encoding {
     /** 消息计数器 */
     protected messageCounter = 1;
     /** 缓存收到的数据 */
-    protected cache = new Map<string, Array<ArrayBuffer | false>>();
+    protected cache = new Map<string, Array<Uint8Array | false>>();
     /** 编码 */
-    encode(data: unknown): ArrayBuffer[] {
+    encode(data: unknown): Uint8Array[] {
         const buffer = encoder.encode(data);
         if (buffer.byteLength > MAX_LEN * MAX_CHUNK) throw new Error(`Message is too large`);
         const messageId = this.messageCounter++;
@@ -31,50 +38,51 @@ export class Encoding {
             const start = MAX_LEN * i;
             const end = chunkCount - 1 === i ? buffer.byteLength : MAX_LEN * (i + 1);
             // | message id (4) | chunk id (2) | chunk count (2) | data |
-            const chunk = new ArrayBuffer(8 + end - start);
-            const writer = new DataView(chunk);
+            const chunk = new Uint8Array(HEADER_SIZE + end - start);
+            const writer = getView(chunk);
             writer.setUint32(0, messageId);
             writer.setUint16(4, i);
             writer.setUint16(6, chunkCount);
-            const view = new Uint8Array(chunk, 8);
-            view.set(new Uint8Array(buffer, start, end - start));
+            chunk.set(new Uint8Array(buffer, start, end - start), HEADER_SIZE);
             chunks.push(chunk);
         }
         return chunks;
     }
 
     /** 解码 */
-    decode(chunks: ArrayBuffer[]): unknown {
+    decode(chunks: Uint8Array[]): unknown {
         if (chunks.length === 0) throw new Error(`Chunks is empty`);
         if (chunks.length > MAX_CHUNK) throw new Error(`Too many chunks`);
-        const chunk0 = chunks[0];
-        const reader = new DataView(chunk0);
+        const chunkLast = chunks[chunks.length - 1];
+        const reader = getView(chunkLast);
         const messageId = reader.getUint32(0);
         const chunkCount = reader.getUint16(6);
         if (chunkCount !== chunks.length) throw new Error(`Invalid chunk count`);
 
-        const buffer = new ArrayBuffer(chunkCount * MAX_LEN);
+        const length = (chunkCount - 1) * MAX_LEN + (chunkLast.byteLength - HEADER_SIZE);
+        const buffer = new ArrayBuffer(length);
         for (let i = 0; i < chunkCount; i++) {
             const start = MAX_LEN * i;
             const end = chunkCount - 1 === i ? buffer.byteLength : MAX_LEN * (i + 1);
             // | message id (4) | chunk id (2) | chunk count (2) | data |
             const chunk = chunks[i];
-            const reader = new DataView(chunk);
+            const reader = getView(chunk);
             const myMessageId = reader.getUint32(0);
             const myIndex = reader.getUint16(4);
             const myChunkCount = reader.getUint16(6);
             if (myMessageId !== messageId || myIndex !== i || myChunkCount !== chunkCount) {
                 throw new Error(`Invalid chunk at index ${i}`);
             }
-            const view = new Uint8Array(chunk, 8);
-            new Uint8Array(buffer, start, end - start).set(view);
+            new Uint8Array(buffer, start, end - start).set(
+                new Uint8Array(chunk.buffer, chunk.byteOffset + HEADER_SIZE),
+            );
         }
         return decoder.decode(buffer);
     }
 
     /** 收到消息时调用以存储消息 */
-    onMessage(sender: string, chunk: ArrayBuffer): { sender: string; message: unknown } | undefined {
-        const reader = new DataView(chunk);
+    onMessage(sender: string, chunk: Uint8Array): { sender: string; message: unknown } | undefined {
+        const reader = getView(chunk);
         const messageId = reader.getUint32(0);
         const chunkId = reader.getUint16(4);
         const chunkCount = reader.getUint16(6);
@@ -91,7 +99,7 @@ export class Encoding {
         }
         cache[chunkId] = chunk;
         if (!cache.includes(false)) {
-            const message = this.decode(cache as ArrayBuffer[]);
+            const message = this.decode(cache as Uint8Array[]);
             this.cache.delete(cacheKey);
             return { sender, message };
         }
