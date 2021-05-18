@@ -1,6 +1,6 @@
 {
   "name": "@cloudpss/peers",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "CloudPSS p2p framework",
   "repository": "https://github.com/CloudPSS/peers",
   "author": "CloudPSS",
