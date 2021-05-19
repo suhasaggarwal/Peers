@@ -285,7 +285,7 @@
 
 "@typescript-eslint/scope-manager@4.24.0":
   version "4.24.0"
-  resolved "https://registry.nlark.com/@typescript-eslint/scope-manager/download/@typescript-eslint/scope-manager-4.24.0.tgz#38088216f0eaf235fa30ed8cabf6948ec734f359"
+  resolved "https://registry.nlark.com/@typescript-eslint/scope-manager/download/@typescript-eslint/scope-manager-4.24.0.tgz?cache=0&sync_timestamp=1621399070506&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40typescript-eslint%2Fscope-manager%2Fdownload%2F%40typescript-eslint%2Fscope-manager-4.24.0.tgz#38088216f0eaf235fa30ed8cabf6948ec734f359"
   integrity sha1-OAiCFvDq8jX6MO2Mq/aUjsc081k=
   dependencies:
     "@typescript-eslint/types" "4.24.0"
@@ -311,7 +311,7 @@
 
 "@typescript-eslint/visitor-keys@4.24.0":
   version "4.24.0"
-  resolved "https://registry.nlark.com/@typescript-eslint/visitor-keys/download/@typescript-eslint/visitor-keys-4.24.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40typescript-eslint%2Fvisitor-keys%2Fdownload%2F%40typescript-eslint%2Fvisitor-keys-4.24.0.tgz#a8fafdc76cad4e04a681a945fbbac4e35e98e297"
+  resolved "https://registry.nlark.com/@typescript-eslint/visitor-keys/download/@typescript-eslint/visitor-keys-4.24.0.tgz#a8fafdc76cad4e04a681a945fbbac4e35e98e297"
   integrity sha1-qPr9x2ytTgSmgalF+7rE416Y4pc=
   dependencies:
     "@typescript-eslint/types" "4.24.0"
@@ -540,7 +540,7 @@ chownr@^1.1.1:
 
 clean-stack@^2.0.0:
   version "2.2.0"
-  resolved "https://registry.npm.taobao.org/clean-stack/download/clean-stack-2.2.0.tgz?cache=0&sync_timestamp=1618679111227&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fclean-stack%2Fdownload%2Fclean-stack-2.2.0.tgz#ee8472dbb129e727b31e8a10a427dee9dfe4008b"
+  resolved "https://registry.nlark.com/clean-stack/download/clean-stack-2.2.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fclean-stack%2Fdownload%2Fclean-stack-2.2.0.tgz#ee8472dbb129e727b31e8a10a427dee9dfe4008b"
   integrity sha1-7oRy27Ep5yezHooQpCfe6d/kAIs=
 
 cli-cursor@^3.1.0:
@@ -821,10 +821,10 @@ eslint-config-prettier@^8.3.0:
   resolved "https://registry.nlark.com/eslint-config-prettier/download/eslint-config-prettier-8.3.0.tgz#f7471b20b6fe8a9a9254cc684454202886a2dd7a"
   integrity sha1-90cbILb+ipqSVMxoRFQgKIai3Xo=
 
-eslint-plugin-jsdoc@^34.7.0:
-  version "34.7.0"
-  resolved "https://registry.nlark.com/eslint-plugin-jsdoc/download/eslint-plugin-jsdoc-34.7.0.tgz#f970318d5004104f035d322794113a1a9a22e3d5"
-  integrity sha1-+XAxjVAEEE8DXTInlBE6Gpoi49U=
+eslint-plugin-jsdoc@^34.8.1:
+  version "34.8.1"
+  resolved "https://registry.nlark.com/eslint-plugin-jsdoc/download/eslint-plugin-jsdoc-34.8.1.tgz#d617663136d65cccbbd398be4bb87dc22f584d25"
+  integrity sha1-1hdmMTbWXMy705i+S7h9wi9YTSU=
   dependencies:
     "@es-joy/jsdoccomment" "^0.6.0"
     comment-parser "1.1.5"
@@ -2521,10 +2521,10 @@ type-fest@^0.8.1:
   resolved "https://registry.nlark.com/type-fest/download/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
   integrity sha1-CeJJ696FHTseSNJ8EFREZn8XuD0=
 
-type-fest@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.nlark.com/type-fest/download/type-fest-1.1.1.tgz#210251e7f57357a1457269e6b34837fed067ac2c"
-  integrity sha1-IQJR5/VzV6FFcmnms0g3/tBnrCw=
+type-fest@^1.1.3:
+  version "1.1.3"
+  resolved "https://registry.nlark.com/type-fest/download/type-fest-1.1.3.tgz#ea1a602e98e5a968a56a289886a52f04c686fc81"
+  integrity sha1-6hpgLpjlqWilaiiYhqUvBMaG/IE=
 
 typescript@^4.2.4:
   version "4.2.4"
