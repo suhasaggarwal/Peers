@@ -3,19 +3,21 @@ import SimplePeer, { Instance as Peer, Options, SignalData } from 'simple-peer';
 import { io, Socket } from 'socket.io-client';
 import { Encoding } from './encoding';
 
-/** config of peers */
+/** Peers 配置 */
 export interface PeersConfig {
-    /** a friendly name for this peer */
+    /** 当前 Peer 的名字 */
     label?: string;
-    /** url of api connection, defaults to `location.origin` */
+    /** API 服务的 URL, 默认为 `location.origin`，在 nodejs 环境下必须设置 */
     url?: string;
-    /** user token */
+    /** API 服务的路径, 默认为 `/peers/` */
+    path?: string;
+    /** 用户 TOKEN */
     token: string;
-    /** room id */
+    /** 房间 ID */
     room: string;
     /** 编解码消息 */
     encoding?: (this: Peers) => Encoding;
-    /** WRTC 实现 */
+    /** WRTC 实现，在 nodejs 环境下需要设为 `require('wrtc')`，浏览器无需设置 */
     wrtc?: Options['wrtc'];
 }
 
@@ -27,14 +29,15 @@ function getDefaultUrl(): string {
     return location.origin;
 }
 
-/** P2P connection */
+/** P2P 连接 */
 export class Peers {
     constructor(readonly config: PeersConfig) {
         const url = (config.url ??= getDefaultUrl());
+        const path = config.path ?? '/peers/';
         this.encoding = config.encoding?.call(this) ?? new Encoding();
 
         this._socket = io(url, {
-            path: '/socket.io/peers',
+            path: `${path}socket.io`,
             auth: {
                 token: config.token,
                 room: config.room,
@@ -43,8 +46,10 @@ export class Peers {
         });
 
         this._socket.on('prepare', ({ sockets, iceServers }) => {
-            for (const id in sockets) {
-                this._labels.set(id, (sockets as Record<string, string>)[id]);
+            const s = sockets as Record<string, string>;
+            for (const id in s) {
+                // 记录连接的标签
+                this._labels.set(id, s[id]);
                 if (id === this._socket.id) continue;
                 this._rtcConfig = {
                     iceServers: iceServers as RTCIceServer[],
@@ -63,6 +68,7 @@ export class Peers {
             }
             const d = data as SignalData & { label?: string };
             peer.signal(d);
+            // 发来 signal 时更新标签
             this._labels.set(source, d.label);
         });
 
@@ -88,12 +94,12 @@ export class Peers {
     get id(): string {
         return this._socket.id;
     }
-    /** 链接的 ID */
+    /** 连接的其他 Peer 的 ID */
     get peers(): string[] {
         return [...this._peers.keys()];
     }
 
-    /** 链接的标签 */
+    /** Peer 的标签 */
     labelOf(id: string): string {
         const label = this._labels.get(id);
         return label ?? id;

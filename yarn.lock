@@ -226,9 +226,9 @@
   integrity sha1-KD9mn/dte4Jg34q3pCYsyD2YglY=
 
 "@types/node@*":
-  version "15.3.0"
-  resolved "https://registry.nlark.com/@types/node/download/@types/node-15.3.0.tgz#d6fed7d6bc6854306da3dea1af9f874b00783e26"
-  integrity sha1-1v7X1rxoVDBto96hr5+HSwB4PiY=
+  version "15.3.1"
+  resolved "https://registry.nlark.com/@types/node/download/@types/node-15.3.1.tgz?cache=0&sync_timestamp=1621463831198&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40types%2Fnode%2Fdownload%2F%40types%2Fnode-15.3.1.tgz#23a06b87eedb524016616e886b116b8fdcb180af"
+  integrity sha1-I6Brh+7bUkAWYW6IaxFrj9yxgK8=
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -263,7 +263,7 @@
 
 "@typescript-eslint/experimental-utils@4.24.0":
   version "4.24.0"
-  resolved "https://registry.nlark.com/@typescript-eslint/experimental-utils/download/@typescript-eslint/experimental-utils-4.24.0.tgz#c23ead9de44b99c3a5fd925c33a106b00165e172"
+  resolved "https://registry.nlark.com/@typescript-eslint/experimental-utils/download/@typescript-eslint/experimental-utils-4.24.0.tgz?cache=0&sync_timestamp=1621571396430&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40typescript-eslint%2Fexperimental-utils%2Fdownload%2F%40typescript-eslint%2Fexperimental-utils-4.24.0.tgz#c23ead9de44b99c3a5fd925c33a106b00165e172"
   integrity sha1-wj6tneRLmcOl/ZJcM6EGsAFl4XI=
   dependencies:
     "@types/json-schema" "^7.0.3"
@@ -285,7 +285,7 @@
 
 "@typescript-eslint/scope-manager@4.24.0":
   version "4.24.0"
-  resolved "https://registry.nlark.com/@typescript-eslint/scope-manager/download/@typescript-eslint/scope-manager-4.24.0.tgz?cache=0&sync_timestamp=1621399070506&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40typescript-eslint%2Fscope-manager%2Fdownload%2F%40typescript-eslint%2Fscope-manager-4.24.0.tgz#38088216f0eaf235fa30ed8cabf6948ec734f359"
+  resolved "https://registry.nlark.com/@typescript-eslint/scope-manager/download/@typescript-eslint/scope-manager-4.24.0.tgz#38088216f0eaf235fa30ed8cabf6948ec734f359"
   integrity sha1-OAiCFvDq8jX6MO2Mq/aUjsc081k=
   dependencies:
     "@typescript-eslint/types" "4.24.0"
@@ -293,12 +293,12 @@
 
 "@typescript-eslint/types@4.24.0":
   version "4.24.0"
-  resolved "https://registry.nlark.com/@typescript-eslint/types/download/@typescript-eslint/types-4.24.0.tgz#6d0cca2048cbda4e265e0c4db9c2a62aaad8228c"
+  resolved "https://registry.nlark.com/@typescript-eslint/types/download/@typescript-eslint/types-4.24.0.tgz?cache=0&sync_timestamp=1621571304884&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40typescript-eslint%2Ftypes%2Fdownload%2F%40typescript-eslint%2Ftypes-4.24.0.tgz#6d0cca2048cbda4e265e0c4db9c2a62aaad8228c"
   integrity sha1-bQzKIEjL2k4mXgxNucKmKqrYIow=
 
 "@typescript-eslint/typescript-estree@4.24.0":
   version "4.24.0"
-  resolved "https://registry.nlark.com/@typescript-eslint/typescript-estree/download/@typescript-eslint/typescript-estree-4.24.0.tgz#b49249679a98014d8b03e8d4b70864b950e3c90f"
+  resolved "https://registry.nlark.com/@typescript-eslint/typescript-estree/download/@typescript-eslint/typescript-estree-4.24.0.tgz?cache=0&sync_timestamp=1621571434330&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40typescript-eslint%2Ftypescript-estree%2Fdownload%2F%40typescript-eslint%2Ftypescript-estree-4.24.0.tgz#b49249679a98014d8b03e8d4b70864b950e3c90f"
   integrity sha1-tJJJZ5qYAU2LA+jUtwhkuVDjyQ8=
   dependencies:
     "@typescript-eslint/types" "4.24.0"
@@ -350,7 +350,7 @@ aggregate-error@^3.0.0:
 
 ajv@^6.10.0, ajv@^6.12.4:
   version "6.12.6"
-  resolved "https://registry.nlark.com/ajv/download/ajv-6.12.6.tgz?cache=0&sync_timestamp=1621023546358&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fajv%2Fdownload%2Fajv-6.12.6.tgz#baf5a62e802b07d977034586f8c3baf5adf26df4"
+  resolved "https://registry.nlark.com/ajv/download/ajv-6.12.6.tgz?cache=0&sync_timestamp=1621517642931&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fajv%2Fdownload%2Fajv-6.12.6.tgz#baf5a62e802b07d977034586f8c3baf5adf26df4"
   integrity sha1-uvWmLoArB9l3A0WG+MO69a3ybfQ=
   dependencies:
     fast-deep-equal "^3.1.1"
@@ -359,9 +359,9 @@ ajv@^6.10.0, ajv@^6.12.4:
     uri-js "^4.2.2"
 
 ajv@^8.0.1:
-  version "8.4.0"
-  resolved "https://registry.nlark.com/ajv/download/ajv-8.4.0.tgz?cache=0&sync_timestamp=1621023546358&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fajv%2Fdownload%2Fajv-8.4.0.tgz#48984fdb2ce225cab15795f0772a8d85669075e4"
-  integrity sha1-SJhP2yziJcqxV5XwdyqNhWaQdeQ=
+  version "8.5.0"
+  resolved "https://registry.nlark.com/ajv/download/ajv-8.5.0.tgz?cache=0&sync_timestamp=1621517642931&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fajv%2Fdownload%2Fajv-8.5.0.tgz#695528274bcb5afc865446aa275484049a18ae4b"
+  integrity sha1-aVUoJ0vLWvyGVEaqJ1SEBJoYrks=
   dependencies:
     fast-deep-equal "^3.1.1"
     json-schema-traverse "^1.0.0"

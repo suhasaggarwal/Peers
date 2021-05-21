@@ -5,14 +5,14 @@ const room = 'zqXGiLPkdwbjDRwIyAEzRz6SbWwwy8_gnXK1FL3azFPUEAel35Hdnrypse0wA0lL';
 
 const p1 = new Peers({
     label: 'p1',
-    url: 'http://localhost:4000',
+    url: 'https://dogfood.local.cloudpss.net',
     token: 'xx',
     room,
     wrtc,
 });
 const p2 = new Peers({
     label: 'p2',
-    url: 'http://localhost:4000',
+    url: 'https://dogfood.local.cloudpss.net',
     token: 'xx',
     room,
     wrtc,
