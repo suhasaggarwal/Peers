@@ -73,7 +73,7 @@ export class Peers {
         });
 
         this._socket.on('error', (err: { data: string }) => {
-            this._data.error(new Error(err.data));
+            this._data.error(new Error(err.data || String(err)));
             this.destroy();
         });
     }

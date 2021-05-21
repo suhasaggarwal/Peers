@@ -215,6 +215,11 @@
   resolved "https://registry.nlark.com/@types/component-emitter/download/@types/component-emitter-1.2.10.tgz#ef5b1589b9f16544642e473db5ea5639107ef3ea"
   integrity sha1-71sVibnxZURkLkc9tepWORB+8+o=
 
+"@types/core-js@^2.5.4":
+  version "2.5.4"
+  resolved "https://registry.nlark.com/@types/core-js/download/@types/core-js-2.5.4.tgz#fc42ebde7d9cfa7c5f2668f117449b02348e41fd"
+  integrity sha1-/ELr3n2c+nxfJmjxF0SbAjSOQf0=
+
 "@types/json-schema@^7.0.3":
   version "7.0.7"
   resolved "https://registry.nlark.com/@types/json-schema/download/@types/json-schema-7.0.7.tgz#98a993516c859eb0d5c4c8f098317a9ea68db9ad"
@@ -649,6 +654,11 @@ conventional-commits-parser@^3.0.0:
     split2 "^3.0.0"
     through2 "^4.0.0"
     trim-off-newlines "^1.0.0"
+
+core-js@^3.12.1:
+  version "3.12.1"
+  resolved "https://registry.nlark.com/core-js/download/core-js-3.12.1.tgz?cache=0&sync_timestamp=1620508113239&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcore-js%2Fdownload%2Fcore-js-3.12.1.tgz#6b5af4ff55616c08a44d386f1f510917ff204112"
+  integrity sha1-a1r0/1VhbAikTThvH1EJF/8gQRI=
 
 core-util-is@~1.0.0:
   version "1.0.2"
@@ -1952,6 +1962,11 @@ process-nextick-args@~2.0.0:
   version "2.0.1"
   resolved "https://registry.npm.taobao.org/process-nextick-args/download/process-nextick-args-2.0.1.tgz#7820d9b16120cc55ca9ae7792680ae7dba6d7fe2"
   integrity sha1-eCDZsWEgzFXKmud5JoCufbptf+I=
+
+process@^0.11.10:
+  version "0.11.10"
+  resolved "https://registry.npm.taobao.org/process/download/process-0.11.10.tgz#7332300e840161bda3e69a1d1d91a7d4bc16f182"
+  integrity sha1-czIwDoQBYb2j5podHZGn1LwW8YI=
 
 progress@^2.0.0:
   version "2.0.3"
