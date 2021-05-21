@@ -1,4 +1,5 @@
 import { UbjsonEncoder, UbjsonDecoder } from '@shelacek/ubjson';
+import type { Promisable } from 'type-fest';
 
 const encoder = new UbjsonEncoder({
     optimizeArrays: 'onlyTypedArrays',
@@ -22,13 +23,25 @@ function getView(chunk: Uint8Array): DataView {
 }
 
 /** 编解码消息 */
-export class Encoding {
+export interface Encoding {
+    /** 编码 */
+    encode(data: unknown): Promisable<Uint8Array[]>;
+    /** 解码 */
+    decode(chunks: Uint8Array[]): Promisable<unknown>;
+    /** 收到消息时调用以存储消息 */
+    onMessage(sender: string, chunk: Uint8Array): Promise<{ sender: string; message: unknown } | undefined>;
+    /** 清理实例 */
+    destroy(): void;
+}
+
+/** 编解码消息 */
+export class DefaultEncoding implements Encoding {
     /** 消息计数器 */
     protected messageCounter = 1;
     /** 缓存收到的数据 */
     protected cache = new Map<string, Array<Uint8Array | false>>();
     /** 编码 */
-    encode(data: unknown): Uint8Array[] {
+    encode(data: unknown): Promisable<Uint8Array[]> {
         const buffer = encoder.encode(data);
         if (buffer.byteLength > MAX_LEN * MAX_CHUNK) throw new Error(`Message is too large`);
         const messageId = this.messageCounter++;
@@ -50,7 +63,7 @@ export class Encoding {
     }
 
     /** 解码 */
-    decode(chunks: Uint8Array[]): unknown {
+    decode(chunks: Uint8Array[]): Promisable<unknown> {
         if (chunks.length === 0) throw new Error(`Chunks is empty`);
         if (chunks.length > MAX_CHUNK) throw new Error(`Too many chunks`);
         const chunkLast = chunks[chunks.length - 1];
@@ -81,7 +94,7 @@ export class Encoding {
     }
 
     /** 收到消息时调用以存储消息 */
-    onMessage(sender: string, chunk: Uint8Array): { sender: string; message: unknown } | undefined {
+    async onMessage(sender: string, chunk: Uint8Array): Promise<{ sender: string; message: unknown } | undefined> {
         const reader = getView(chunk);
         const messageId = reader.getUint32(0);
         const chunkId = reader.getUint16(4);
@@ -99,7 +112,7 @@ export class Encoding {
         }
         cache[chunkId] = chunk;
         if (!cache.includes(false)) {
-            const message = this.decode(cache as Uint8Array[]);
+            const message = await this.decode(cache as Uint8Array[]);
             this.cache.delete(cacheKey);
             return { sender, message };
         }

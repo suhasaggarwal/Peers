@@ -1,7 +1,7 @@
 import { Observable, Subject } from 'rxjs';
 import SimplePeer, { Instance as Peer, Options, SignalData } from 'simple-peer';
 import { io, Socket } from 'socket.io-client';
-import { Encoding } from './encoding';
+import { Encoding, DefaultEncoding } from './encoding';
 
 /** Peers 配置 */
 export interface PeersConfig {
@@ -34,7 +34,7 @@ export class Peers {
     constructor(readonly config: PeersConfig) {
         const url = (config.url ??= getDefaultUrl());
         const path = config.path ?? '/peers/';
-        this.encoding = config.encoding?.call(this) ?? new Encoding();
+        this.encoding = config.encoding?.call(this) ?? new DefaultEncoding();
 
         this._socket = io(url, {
             path: `${path}socket.io`,
@@ -136,14 +136,14 @@ export class Peers {
         });
 
         peer.on('data', (data) => {
-            this._onPeerData(id, data);
+            void this._onPeerData(id, data);
         });
         return peer;
     }
 
     /** 数据回调 */
-    protected _onPeerData(sender: string, data: Uint8Array): void {
-        const message = this.encoding.onMessage(sender, data);
+    protected async _onPeerData(sender: string, data: Uint8Array): Promise<void> {
+        const message = await this.encoding.onMessage(sender, data);
         if (message == null) return;
         this._data.next(message);
     }
@@ -172,7 +172,7 @@ export class Peers {
 
     /** 发送数据 */
     async send(data: unknown, receivers?: readonly string[] | string): Promise<void> {
-        const chunks = this.encoding.encode(data);
+        const chunks = await this.encoding.encode(data);
         let peers;
         if (!receivers) {
             peers = [...this._peers.values()];
