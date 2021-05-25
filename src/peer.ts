@@ -1,3 +1,4 @@
+import './polyfill';
 import { Observable, Subject } from 'rxjs';
 import SimplePeer, { Instance as Peer, Options, SignalData } from 'simple-peer';
 import { io, Socket } from 'socket.io-client';
