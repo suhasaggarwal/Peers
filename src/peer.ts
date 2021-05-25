@@ -160,20 +160,18 @@ export class Peers {
     }
 
     /** 发送数据的实现 */
-    protected async _send(chunks: Uint8Array[], receiver: Peer): Promise<void> {
+    protected _send(chunks: Uint8Array[], receiver: Peer): void {
         for (const chunk of chunks) {
-            await new Promise<void>((resolve, reject) => {
-                receiver.write(chunk, (err) => {
-                    if (err) reject(err);
-                    else resolve();
-                });
-            });
+            receiver.write(chunk);
         }
     }
 
     /** 发送数据 */
     async send(data: unknown, receivers?: readonly string[] | string): Promise<void> {
-        const chunks = await this.encoding.encode(data);
+        let chunks = this.encoding.encode(data);
+        if (!Array.isArray(chunks)) {
+            chunks = await chunks;
+        }
         let peers;
         if (!receivers) {
             peers = [...this._peers.values()];
@@ -188,6 +186,8 @@ export class Peers {
                 peers.push(peer);
             }
         }
-        await Promise.all(peers.map((peer) => this._send(chunks, peer)));
+        for (const peer of peers) {
+            this._send(chunks, peer);
+        }
     }
 }
