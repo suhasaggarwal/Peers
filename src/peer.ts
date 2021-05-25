@@ -152,7 +152,7 @@ export class Peers {
     destroy(): void {
         this._socket.close();
         for (const peer of this._peers.values()) {
-            peer.destroy();
+            peer.end();
         }
         this._peers.clear();
         this.encoding.destroy();

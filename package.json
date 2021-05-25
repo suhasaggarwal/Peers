@@ -1,6 +1,6 @@
 {
   "name": "@cloudpss/peers",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "CloudPSS p2p framework",
   "repository": "https://github.com/CloudPSS/peers",
   "author": "CloudPSS",
@@ -32,11 +32,11 @@
   "devDependencies": {
     "@commitlint/cli": "^12.1.4",
     "@types/core-js": "^2.5.4",
-    "@typescript-eslint/eslint-plugin": "^4.24.0",
-    "@typescript-eslint/parser": "^4.24.0",
-    "eslint": "^7.26.0",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jsdoc": "^34.8.2",
+    "eslint-plugin-jsdoc": "^35.0.0",
     "eslint-plugin-prettier": "^3.4.0",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
