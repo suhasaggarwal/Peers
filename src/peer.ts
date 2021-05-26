@@ -10,7 +10,7 @@ export interface PeersConfig {
     label?: string;
     /** API 服务的 URL, 默认为 `location.origin`，在 nodejs 环境下必须设置 */
     url?: string;
-    /** API 服务的路径, 默认为 `/peers/` */
+    /** API 服务的路径, 默认为 `/api/peers/` */
     path?: string;
     /** 用户 TOKEN */
     token: string;
@@ -34,7 +34,7 @@ function getDefaultUrl(): string {
 export class Peers {
     constructor(readonly config: PeersConfig) {
         const url = (config.url ??= getDefaultUrl());
-        const path = config.path ?? '/peers/';
+        const path = config.path ?? '/api/peers/';
         this.encoding = config.encoding?.call(this) ?? new DefaultEncoding();
 
         this._socket = io(url, {
@@ -168,10 +168,6 @@ export class Peers {
 
     /** 发送数据 */
     async send(data: unknown, receivers?: readonly string[] | string): Promise<void> {
-        let chunks = this.encoding.encode(data);
-        if (!Array.isArray(chunks)) {
-            chunks = await chunks;
-        }
         let peers;
         if (!receivers) {
             peers = [...this._peers.values()];
@@ -185,6 +181,10 @@ export class Peers {
                 if (!peer) throw new Error(`Peer with id ${id} is not found`);
                 peers.push(peer);
             }
+        }
+        let chunks = this.encoding.encode(data);
+        if (!Array.isArray(chunks)) {
+            chunks = await chunks;
         }
         for (const peer of peers) {
             this._send(chunks, peer);
