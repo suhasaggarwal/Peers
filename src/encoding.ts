@@ -121,6 +121,6 @@ export class DefaultEncoding implements Encoding {
 
     /** 清理实例 */
     destroy(): void {
-        this.cache.clear();
+        // DO nothing
     }
 }
