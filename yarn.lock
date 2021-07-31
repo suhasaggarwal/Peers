@@ -230,11 +230,6 @@
   resolved "https://registry.nlark.com/@types/component-emitter/download/@types/component-emitter-1.2.10.tgz#ef5b1589b9f16544642e473db5ea5639107ef3ea"
   integrity sha1-71sVibnxZURkLkc9tepWORB+8+o=
 
-"@types/core-js@^2.5.4":
-  version "2.5.4"
-  resolved "https://registry.nlark.com/@types/core-js/download/@types/core-js-2.5.4.tgz#fc42ebde7d9cfa7c5f2668f117449b02348e41fd"
-  integrity sha1-/ELr3n2c+nxfJmjxF0SbAjSOQf0=
-
 "@types/json-schema@^7.0.7":
   version "7.0.8"
   resolved "https://registry.nlark.com/@types/json-schema/download/@types/json-schema-7.0.8.tgz#edf1bf1dbf4e04413ca8e5b17b3b7d7d54b59818"
@@ -668,11 +663,6 @@ conventional-commits-parser@^3.0.0:
     split2 "^3.0.0"
     through2 "^4.0.0"
     trim-off-newlines "^1.0.0"
-
-core-js@^3.16.0:
-  version "3.16.0"
-  resolved "https://registry.nlark.com/core-js/download/core-js-3.16.0.tgz#1d46fb33720bc1fa7f90d20431f36a5540858986"
-  integrity sha1-HUb7M3ILwfp/kNIEMfNqVUCFiYY=
 
 core-util-is@~1.0.0:
   version "1.0.2"

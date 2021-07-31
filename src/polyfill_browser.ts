@@ -1,8 +1,8 @@
 import * as p from 'process';
-import 'core-js/features/global-this';
 
 if (typeof process == 'undefined') {
-    Object.defineProperty(globalThis, 'process', {
+    const obj = typeof globalThis == 'object' ? globalThis : typeof window == 'object' ? window : self;
+    Object.defineProperty(obj, 'process', {
         value: p,
         configurable: true,
         writable: true,
