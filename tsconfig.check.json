@@ -18,6 +18,8 @@
     // "noUncheckedIndexedAccess": true /* Include 'undefined' in index signature results */,
     "noPropertyAccessFromIndexSignature": true /* Require undeclared properties from index signatures to use element accesses. */,
 
+    "noImplicitOverride": true,
+
     /* Advanced Options */
     "skipLibCheck": true /* Skip type checking of declaration files. */,
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
