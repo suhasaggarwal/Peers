@@ -1,9 +1,8 @@
-import './polyfill';
+import type { Instance as Peer, SignalData } from 'simple-peer';
 import { Observable, Subject } from 'rxjs';
-import SimplePeer, { Instance as Peer, Options, SignalData } from 'simple-peer';
 import { io, Socket } from 'socket.io-client';
 import { Encoding, DefaultEncoding } from './encoding';
-import { agent } from '@cloudpss/proxy-agent';
+import { wrtc, SimplePeer } from './polyfill';
 
 /** Peers 配置 */
 export interface PeersConfig {
@@ -17,8 +16,6 @@ export interface PeersConfig {
     room: string;
     /** 编解码消息 */
     encoding?: (this: Peers) => Encoding;
-    /** WRTC 实现，在 nodejs 环境下需要设为 `require('wrtc')`，浏览器无需设置 */
-    wrtc?: Options['wrtc'];
 }
 
 /** 默认URL */
@@ -44,7 +41,6 @@ export class Peers {
 
         this._socket = io(url.origin, {
             path: `${url.pathname}socket.io`,
-            agent: agent as string,
             auth: {
                 token: config.token,
                 room: config.room,
@@ -123,7 +119,7 @@ export class Peers {
             initiator,
             config: this._rtcConfig,
             objectMode: true,
-            wrtc: this.config.wrtc,
+            wrtc: wrtc,
         });
         this._peers.set(id, peer);
 

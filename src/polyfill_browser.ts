@@ -1,10 +1,4 @@
-import * as p from 'process';
+import _SimplePeer from 'simple-peer/simplepeer.min.js';
 
-if (typeof process == 'undefined') {
-    const obj = typeof globalThis == 'object' ? globalThis : typeof window == 'object' ? window : self;
-    Object.defineProperty(obj, 'process', {
-        value: p,
-        configurable: true,
-        writable: true,
-    });
-}
+export const SimplePeer: typeof import('simple-peer') = _SimplePeer;
+export const wrtc = undefined;
