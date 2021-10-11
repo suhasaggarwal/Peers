@@ -19,32 +19,32 @@
     "build:esm": "tsc --outDir dist/esm --module ESNext --target ESNext",
     "prepublishOnly": "yarn build",
     "prepare": "husky install",
-    "format": "prettier --write .",
+    "format": "prettier --ignore-path .gitignore --write .",
     "lint": "eslint --ext .js,.ts .",
     "clean": "rimraf dist"
   },
   "dependencies": {
     "@shelacek/ubjson": "^1.1.0",
-    "@types/simple-peer": "^9.11.1",
+    "@types/simple-peer": "^9.11.3",
     "process": "^0.11.10",
-    "rxjs": "^7.3.0",
+    "rxjs": "^7.4.0",
     "simple-peer": "^9.11.0",
-    "socket.io-client": "^4.1.3",
-    "tslib": "^2.3.0",
-    "type-fest": "^1.2.3"
+    "socket.io-client": "^4.2.0",
+    "tslib": "^2.3.1",
+    "type-fest": "^2.3.4",
+    "wrtc": "^0.4.7"
   },
   "devDependencies": {
-    "@commitlint/cli": "^13.1.0",
-    "@typescript-eslint/eslint-plugin": "^4.28.5",
-    "@typescript-eslint/parser": "^4.28.5",
+    "@commitlint/cli": "^13.2.1",
+    "@typescript-eslint/eslint-plugin": "^4.33.0",
+    "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-jsdoc": "^36.0.6",
-    "eslint-plugin-prettier": "^3.4.0",
-    "husky": "^7.0.1",
-    "lint-staged": "^11.1.1",
-    "prettier": "^2.3.2",
-    "typescript": "^4.3.5",
-    "wrtc": "^0.4.7"
+    "eslint-plugin-jsdoc": "^36.1.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "husky": "^7.0.2",
+    "lint-staged": "^11.2.3",
+    "prettier": "^2.4.1",
+    "typescript": "^4.4.3"
   }
 }

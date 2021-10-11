@@ -1,44 +1,47 @@
 import './polyfill';
 import { Observable, Subject } from 'rxjs';
-import SimplePeer, { Instance as Peer, Options, SignalData } from 'simple-peer';
+import SimplePeer, { Instance as Peer, SignalData } from 'simple-peer';
 import { io, Socket } from 'socket.io-client';
 import { Encoding, DefaultEncoding } from './encoding';
+import { wrtc } from './polyfill';
 
 /** Peers 配置 */
 export interface PeersConfig {
     /** 当前 Peer 的名字 */
     label?: string;
-    /** API 服务的 URL, 默认为 `location.origin`，在 nodejs 环境下必须设置 */
+    /** API 服务的 URL, 默认为 `` `${location.origin}/api/peers/` ``，在 nodejs 环境下必须设置 */
     url?: string;
-    /** API 服务的路径, 默认为 `/api/peers/` */
-    path?: string;
     /** 用户 TOKEN */
     token: string;
     /** 房间 ID */
     room: string;
     /** 编解码消息 */
     encoding?: (this: Peers) => Encoding;
-    /** WRTC 实现，在 nodejs 环境下需要设为 `require('wrtc')`，浏览器无需设置 */
-    wrtc?: Options['wrtc'];
 }
 
 /** 默认URL */
 function getDefaultUrl(): string {
-    if (typeof location == 'undefined') {
+    if (typeof location != 'object') {
         throw new Error(`'url' must specified in nodejs`);
     }
-    return location.origin;
+    return `${location.origin}/api/peers/`;
 }
 
 /** P2P 连接 */
 export class Peers {
     constructor(readonly config: PeersConfig) {
-        const url = (config.url ??= getDefaultUrl());
-        const path = config.path ?? '/api/peers/';
+        config.url ??= getDefaultUrl();
+        const url = new URL(config.url ?? getDefaultUrl());
+        if (url.pathname === '/' || url.pathname === '/api' || url.pathname === '/api/') {
+            url.pathname = '/api/peers/';
+        } else if (!url.pathname.endsWith('/')) {
+            url.pathname += '/';
+        }
+        config.url = url.href;
         this.encoding = config.encoding?.call(this) ?? new DefaultEncoding();
 
-        this._socket = io(url, {
-            path: `${path}socket.io`,
+        this._socket = io(url.origin, {
+            path: `${url.pathname}socket.io`,
             auth: {
                 token: config.token,
                 room: config.room,
@@ -117,7 +120,7 @@ export class Peers {
             initiator,
             config: this._rtcConfig,
             objectMode: true,
-            wrtc: this.config.wrtc,
+            wrtc: wrtc,
         });
         this._peers.set(id, peer);
 

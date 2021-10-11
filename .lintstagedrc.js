@@ -1,7 +1,7 @@
 const path = require('path');
 
 const prettierSupportInfo = require('prettier').getSupportInfo();
-const eslintCli = new (require('eslint').CLIEngine)({});
+const eslintCli = new (require('eslint').ESLint)({});
 
 /** @type {readonly string[]} */
 const prettierSupportedExt = prettierSupportInfo.languages.reduce((arr, l) => {
@@ -17,11 +17,27 @@ const prettierSupportedFilename = prettierSupportInfo.languages.reduce((arr, l) 
 /**
  * @param {string} f
  */
-const isEslintFile = (f) => {
+const isEslintFile = async (f) => {
     const ext = path.extname(f);
     if (!ext || !['.js', '.jsx', '.ts', '.tsx', '.vue'].includes(ext)) return false;
-    return !eslintCli.isPathIgnored(f);
+    return !(await eslintCli.isPathIgnored(f));
 };
+
+const isStylelintFile = (() => {
+    try {
+        require.resolve('stylelint');
+        /**
+         * @param {string} f
+         */
+        return (f) => {
+            const ext = path.extname(f);
+            if (!ext || !['.css', '.scss', '.sass'].includes(ext)) return false;
+            return true;
+        };
+    } catch {
+        return () => false;
+    }
+})();
 
 /**
  * @param {string[]} files
@@ -33,15 +49,20 @@ function makeCommands(files, commands) {
     return commands.map((c) => c + fileLine);
 }
 /**
- * @param {(files: string[]) => string[]} impl
- * @returns {(files: string[]) => string[]}
+ * @param {(files: string[]) => (string[] | Promise<string[]>)} impl
+ * @returns {(files: string[]) => Promise<string[]>}
  */
 function handler(impl) {
-    return (files) => {
+    return async (files) => {
         console.log('files: ', files);
-        const commands = impl(files);
-        console.log('commands: ', commands);
-        return commands;
+        try {
+            const commands = await impl(files);
+            console.log('commands: ', commands);
+            return commands;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
     };
 }
 
@@ -49,26 +70,30 @@ module.exports = {
     /**
      * @param {string[]} files
      */
-    '*': handler((files) => {
+    '*': handler(async (files) => {
         const commands = [];
+        const eslintFiles = [];
+        const stylelintFiles = [];
+        const prettierFiles = [];
+        for (const file of files) {
+            if (await isEslintFile(file)) {
+                eslintFiles.push(file);
+            } else if (isStylelintFile(file)) {
+                stylelintFiles.push(file);
+            } else {
+                const filename = path.basename(file);
+                if (
+                    prettierSupportedFilename.includes(filename) ||
+                    prettierSupportedExt.some((v) => filename.endsWith(v))
+                ) {
+                    prettierFiles.push(file);
+                }
+            }
+        }
         commands.push(
-            ...makeCommands(
-                files.filter((file) => isEslintFile(file)),
-                [`eslint --fix --max-warnings 0 --no-error-on-unmatched-pattern`, `git add`],
-            ),
-        );
-        commands.push(
-            ...makeCommands(
-                files.filter((file) => {
-                    if (isEslintFile(file)) return false;
-                    const filename = path.basename(file);
-                    return (
-                        prettierSupportedFilename.includes(filename) ||
-                        prettierSupportedExt.some((v) => filename.endsWith(v))
-                    );
-                }),
-                [`prettier --write`, `git add`],
-            ),
+            ...makeCommands(eslintFiles, [`eslint --fix --max-warnings 0 --no-error-on-unmatched-pattern`, `git add`]),
+            ...makeCommands(stylelintFiles, [`stylelint --fix`, `git add`]),
+            ...makeCommands(prettierFiles, [`prettier --write`, `git add`]),
         );
         return commands;
     }),
