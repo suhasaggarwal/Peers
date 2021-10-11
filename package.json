@@ -24,6 +24,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
+    "@cloudpss/proxy-agent": "^0.3.0-alpha.11",
     "@shelacek/ubjson": "^1.1.0",
     "@types/simple-peer": "^9.11.3",
     "process": "^0.11.10",

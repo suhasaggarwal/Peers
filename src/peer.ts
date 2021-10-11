@@ -3,6 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import SimplePeer, { Instance as Peer, Options, SignalData } from 'simple-peer';
 import { io, Socket } from 'socket.io-client';
 import { Encoding, DefaultEncoding } from './encoding';
+import { agent } from '@cloudpss/proxy-agent';
 
 /** Peers 配置 */
 export interface PeersConfig {
@@ -43,6 +44,7 @@ export class Peers {
 
         this._socket = io(url.origin, {
             path: `${url.pathname}socket.io`,
+            agent: agent as string,
             auth: {
                 token: config.token,
                 room: config.room,
