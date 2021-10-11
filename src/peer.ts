@@ -1,9 +1,8 @@
 import './polyfill';
 import { Observable, Subject } from 'rxjs';
-import SimplePeer, { Instance as Peer, SignalData } from 'simple-peer';
+import SimplePeer, { Instance as Peer, Options, SignalData } from 'simple-peer';
 import { io, Socket } from 'socket.io-client';
 import { Encoding, DefaultEncoding } from './encoding';
-import { wrtc } from './polyfill';
 
 /** Peers 配置 */
 export interface PeersConfig {
@@ -17,6 +16,8 @@ export interface PeersConfig {
     room: string;
     /** 编解码消息 */
     encoding?: (this: Peers) => Encoding;
+    /** WRTC 实现，在 nodejs 环境下需要设为 `require('wrtc')`，浏览器无需设置 */
+    wrtc?: Options['wrtc'];
 }
 
 /** 默认URL */
@@ -120,7 +121,7 @@ export class Peers {
             initiator,
             config: this._rtcConfig,
             objectMode: true,
-            wrtc: wrtc,
+            wrtc: this.config.wrtc,
         });
         this._peers.set(id, peer);
 

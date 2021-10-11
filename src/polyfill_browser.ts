@@ -8,5 +8,3 @@ if (typeof process == 'undefined') {
         writable: true,
     });
 }
-
-export const wrtc = undefined;
