@@ -48,31 +48,30 @@ export class Peers {
             },
         });
 
-        this._socket.on('prepare', ({ sockets, iceServers }) => {
-            const s = sockets as Record<string, string>;
-            for (const id in s) {
-                // 记录连接的标签
-                this._labels.set(id, s[id]);
-                if (id === this._socket.id) continue;
-                this._rtcConfig = {
-                    iceServers: iceServers as RTCIceServer[],
-                };
+        this._socket.on(
+            'prepare',
+            ({ sockets, iceServers }: { sockets: Record<string, string>; iceServers: RTCIceServer[] }) => {
+                for (const id in sockets) {
+                    // 记录连接的标签
+                    this._labels.set(id, sockets[id]);
+                    if (id === this._socket.id) continue;
+                    this._rtcConfig = { iceServers };
 
-                if (!this._peers.has(id)) {
-                    this._createPeer(id, true);
+                    if (!this._peers.has(id)) {
+                        this._createPeer(id, true);
+                    }
                 }
-            }
-        });
+            },
+        );
 
-        this._socket.on('signal', (source, data) => {
+        this._socket.on('signal', (source: string, data: SignalData & { label?: string }) => {
             let peer = this._peers.get(source);
             if (!peer) {
                 peer = this._createPeer(source);
             }
-            const d = data as SignalData & { label?: string };
-            peer.signal(d);
+            peer.signal(data);
             // 发来 signal 时更新标签
-            this._labels.set(source, d.label);
+            this._labels.set(source, data.label);
         });
 
         this._socket.on('error', (err: { data: string }) => {
@@ -139,7 +138,7 @@ export class Peers {
         });
 
         peer.on('data', (data) => {
-            void this._onPeerData(id, data);
+            void this._onPeerData(id, data as Uint8Array);
         });
         return peer;
     }
