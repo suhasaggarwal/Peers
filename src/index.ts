@@ -1,2 +1,2 @@
-export * from './encoding';
-export * from './peer';
+export * from './encoding.js';
+export * from './peer.js';

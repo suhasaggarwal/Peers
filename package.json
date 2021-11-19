@@ -5,21 +5,25 @@
   "repository": "https://github.com/CloudPSS/peers",
   "author": "CloudPSS",
   "license": "MIT",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "types": "dist/esm/index.d.ts",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "browser": {
-    "./dist/esm/polyfill": "./dist/esm/polyfill_browser.js",
-    "./dist/cjs/polyfill": "./dist/cjs/polyfill_browser.js"
+    "./dist/polyfill.js": "./dist/polyfill_browser.js"
+  },
+  "exports": {
+    ".": {
+      "default": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "scripts": {
     "prepare": "husky install",
     "format": "prettier --ignore-path .gitignore --write .",
     "lint": "eslint --ext .js,.ts .",
     "start": "yarn clean && tsc --watch",
-    "build": "yarn clean && yarn build:cjs && yarn build:esm",
-    "build:cjs": "tsc",
-    "build:esm": "tsc --outDir dist/esm --module ESNext --target ESNext",
+    "build": "yarn clean && tsc",
     "prepublishOnly": "yarn build",
     "clean": "rimraf dist"
   },

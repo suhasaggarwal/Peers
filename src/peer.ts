@@ -1,8 +1,9 @@
 import type { Instance as Peer, SignalData } from 'simple-peer';
 import { Observable, Subject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
-import { Encoding, DefaultEncoding } from './encoding';
-import { wrtc, SimplePeer } from './polyfill';
+import { DefaultEncoding } from './encoding.js';
+import type { Encoding } from './encoding.js';
+import { wrtc, SimplePeer } from './polyfill.js';
 
 /** Peers 配置 */
 export interface PeersConfig {
@@ -15,7 +16,9 @@ export interface PeersConfig {
     /** 房间 ID */
     room: string;
     /** 编解码消息 */
-    encoding?: (this: Peers) => Encoding;
+    encoding?: (instance: Peers) => Encoding | undefined;
+    /** 调试输出 */
+    logger?: (...args: unknown[]) => void;
 }
 
 /** 默认URL */
@@ -29,6 +32,11 @@ function getDefaultUrl(): string {
 /** P2P 连接 */
 export class Peers {
     constructor(readonly config: PeersConfig) {
+        this.logger =
+            config.logger ??
+            (() => {
+                // noop
+            });
         config.url ??= getDefaultUrl();
         const url = new URL(config.url ?? getDefaultUrl());
         if (url.pathname === '/' || url.pathname === '/api' || url.pathname === '/api/') {
@@ -37,7 +45,7 @@ export class Peers {
             url.pathname += '/';
         }
         config.url = url.href;
-        this.encoding = config.encoding?.call(this) ?? new DefaultEncoding();
+        this.encoding = config.encoding?.(this) ?? new DefaultEncoding();
 
         this._socket = io(url.origin, {
             path: `${url.pathname}socket.io`,
@@ -71,14 +79,19 @@ export class Peers {
             }
             peer.signal(data);
             // 发来 signal 时更新标签
-            this._labels.set(source, data.label);
+            if (data.label) {
+                this._labels.set(source, data.label);
+            }
         });
 
         this._socket.on('error', (err: { data: string }) => {
+            this.logger('socket err', err);
             this._data.error(new Error(err.data || String(err)));
             this.destroy();
         });
     }
+    /** 记录日志 */
+    protected readonly logger: (...args: unknown[]) => void;
     /** 编解码消息 */
     protected readonly encoding: Encoding;
 
@@ -126,14 +139,17 @@ export class Peers {
             this._socket.emit('signal', id, data);
         });
 
-        // peer.on('connect', () => {
-        // });
+        peer.on('connect', () => {
+            this.logger('peer connected', id);
+        });
 
         peer.on('close', () => {
+            this.logger('peer close', id);
             this._peers.delete(id);
         });
 
-        peer.on('error', () => {
+        peer.on('error', (err) => {
+            this.logger('peer error', id, err);
             this._peers.delete(id);
         });
 
