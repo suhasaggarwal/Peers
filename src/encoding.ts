@@ -1,15 +1,6 @@
-import { UbjsonEncoder, UbjsonDecoder } from '@shelacek/ubjson';
+import { encode, decode } from '@cloudpss/ubjson';
 import type { Promisable } from 'type-fest';
 
-const encoder = new UbjsonEncoder({
-    optimizeArrays: 'onlyTypedArrays',
-    optimizeObjects: false,
-});
-const decoder = new UbjsonDecoder({
-    int64Handling: 'raw',
-    highPrecisionNumberHandling: 'raw',
-    useTypedArrays: true,
-});
 /** 单个消息分片大小上限，不包括消息头 */
 const MAX_LEN = 15 * 1024;
 /** 消息头大小 */
@@ -42,7 +33,7 @@ export class DefaultEncoding implements Encoding {
     protected cache = new Map<string, Array<Uint8Array | false>>();
     /** 编码 */
     encode(data: unknown): Promisable<Uint8Array[]> {
-        const buffer = encoder.encode(data);
+        const buffer = encode(data);
         if (buffer.byteLength > MAX_LEN * MAX_CHUNK) throw new Error(`Message is too large`);
         const messageId = this.messageCounter++;
         const chunks = [];
@@ -56,7 +47,7 @@ export class DefaultEncoding implements Encoding {
             writer.setUint32(0, messageId);
             writer.setUint16(4, i);
             writer.setUint16(6, chunkCount);
-            chunk.set(new Uint8Array(buffer, start, end - start), HEADER_SIZE);
+            chunk.set(buffer.subarray(start, end), HEADER_SIZE);
             chunks.push(chunk);
         }
         return chunks;
@@ -72,11 +63,10 @@ export class DefaultEncoding implements Encoding {
         const chunkCount = reader.getUint16(6);
         if (chunkCount !== chunks.length) throw new Error(`Invalid chunk count`);
 
-        const length = (chunkCount - 1) * MAX_LEN + (chunkLast.byteLength - HEADER_SIZE);
-        const buffer = new ArrayBuffer(length);
+        const length = chunks.reduce((sum, chunk) => sum + (chunk.byteLength - HEADER_SIZE), 0);
+        const buffer = new Uint8Array(length);
+        let ptr = 0;
         for (let i = 0; i < chunkCount; i++) {
-            const start = MAX_LEN * i;
-            const end = chunkCount - 1 === i ? buffer.byteLength : MAX_LEN * (i + 1);
             // | message id (4) | chunk id (2) | chunk count (2) | data |
             const chunk = chunks[i];
             const reader = getView(chunk);
@@ -86,11 +76,11 @@ export class DefaultEncoding implements Encoding {
             if (myMessageId !== messageId || myIndex !== i || myChunkCount !== chunkCount) {
                 throw new Error(`Invalid chunk at index ${i}`);
             }
-            new Uint8Array(buffer, start, end - start).set(
-                new Uint8Array(chunk.buffer, chunk.byteOffset + HEADER_SIZE),
-            );
+            const data = chunk.subarray(HEADER_SIZE);
+            buffer.set(data, ptr);
+            ptr += data.byteLength;
         }
-        return decoder.decode(buffer);
+        return decode(buffer);
     }
 
     /** 收到消息时调用以存储消息 */
