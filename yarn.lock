@@ -95,10 +95,10 @@
   resolved "https://registry.npmmirror.com/@cloudpss/tsconfig/download/@cloudpss/tsconfig-1.1.0.tgz#475ea7a898e3a22387794abf1823d0d83fc8d1f8"
   integrity sha1-R16nqJjjoiOHeUq/GCPQ2D/I0fg=
 
-"@cloudpss/ubjson@^0.3.0-alpha.24":
-  version "0.3.0-alpha.24"
-  resolved "https://registry.npmmirror.com/@cloudpss/ubjson/download/@cloudpss/ubjson-0.3.0-alpha.24.tgz#7ffc5f74984f3d8dc478d470d0ffa7b66c5312a2"
-  integrity sha1-f/xfdJhPPY3EeNRw0P+ntmxTEqI=
+"@cloudpss/ubjson@^0.3.6":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@cloudpss/ubjson/-/ubjson-0.3.6.tgz#000a0c2246015fe639c5c67aee8356092566eec3"
+  integrity sha512-+ujVOFDYn19DfxZJvtR1gbfqQZ4bbxm6eAPPYNy5Mbz6Dv5SibcDXY3MKozZBvektN4zGpNlUiJU0xGpdyL0Dw==
 
 "@commitlint/cli@^15.0.0":
   version "15.0.0"

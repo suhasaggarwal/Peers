@@ -42,7 +42,7 @@
   },
   "dependencies": {
     "@cloudpss/proxy-agent": "^0.3.0-alpha.24",
-    "@cloudpss/ubjson": "^0.3.0-alpha.24",
+    "@cloudpss/ubjson": "^0.3.6",
     "@types/simple-peer": "^9.11.3",
     "request": "^2.88.2",
     "rxjs": "^7.4.0",
