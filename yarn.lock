@@ -83,10 +83,10 @@
     "@types/prettier" "^2.4.2"
     prettier "^2.4.1"
 
-"@cloudpss/proxy-agent@^0.3.0-alpha.24":
-  version "0.3.0-alpha.24"
-  resolved "https://registry.npmmirror.com/@cloudpss/proxy-agent/download/@cloudpss/proxy-agent-0.3.0-alpha.24.tgz#e8aefea5244ff54b5cab16e65197df0075451e9c"
-  integrity sha1-6K7+pSRP9UtcqxbmUZffAHVFHpw=
+"@cloudpss/proxy-agent@^0.3.0":
+  version "0.3.6"
+  resolved "https://registry.yarnpkg.com/@cloudpss/proxy-agent/-/proxy-agent-0.3.6.tgz#c4f892295b657351e091e1e7992fe04f1ea01fd1"
+  integrity sha512-W2fSDwsmXS3HRIiwEzunw/WEyDY/DnecJF5dgoyGpSEF1w0AQXrOQ2uDB/zNSUhrEjQCW/lnuqBEzbkqwwDgDg==
   dependencies:
     proxy-agent "^5.0.0"
 
